@@ -5,6 +5,9 @@ on:
   push:
   pull_request:
 
+permissions: # least privileges, see https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#permissions
+  contents: read
+
 jobs:
   docker_test:
     name: docker_test
@@ -55,16 +58,6 @@ jobs:
           sbom: true
           tags: |
             ${{ env.DOCKER_ORGANIZATION_NAME }}/${{ env.IMAGE_NAME }}:${{ env.MYREF }}
-      - name: Pre-Build and push to docker hub for master branch
-        # if: ${{ env.BRANCH_NAME == 'master' }}
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ${{ env.DOCKERFILE }}
-          platforms: ${{ env.PLATFORMS }}
-          push: false
-          tags: |
-            ${{ env.DOCKER_ORGANIZATION_NAME }}/${{ env.IMAGE_NAME }}:unstable
       - name: Build and push to docker hub for master branch
         id: master_build
         # if: ${{ env.BRANCH_NAME == 'master' }}
