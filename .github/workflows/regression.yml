@@ -2,7 +2,7 @@
 name: 'Call reusable regression workflow'
 
 on:
-  push:
+  # push:
   pull_request:
   schedule:
     - cron: '0 22 * * 3'

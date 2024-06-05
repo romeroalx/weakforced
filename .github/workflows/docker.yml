@@ -2,7 +2,7 @@
 name: 'Build docker image and test'
 
 on:
-  push:
+  # push:
   pull_request:
 
 jobs:

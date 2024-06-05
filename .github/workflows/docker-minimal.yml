@@ -12,7 +12,8 @@ jobs:
     env:
       # Github.refname is wrong for pull requests - have to use head ref for them
       MYREF: ${{ github.event.pull_request && github.head_ref || github.ref_name }}
-      PLATFORMS: linux/arm64,linux/amd64
+      PLATFORMS: linux/arm64
+      # PLATFORMS: linux/arm64,linux/amd64
       DOCKERFILE: docker/wforce_image/Dockerfile.minimal
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
       IMAGE_NAME: wforce-minimal
@@ -54,9 +55,19 @@ jobs:
           sbom: true
           tags: |
             ${{ env.DOCKER_ORGANIZATION_NAME }}/${{ env.IMAGE_NAME }}:${{ env.MYREF }}
+      - name: Pre-Build and push to docker hub for master branch
+        # if: ${{ env.BRANCH_NAME == 'master' }}
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{ env.DOCKERFILE }}
+          platforms: ${{ env.PLATFORMS }}
+          push: false
+          tags: |
+            ${{ env.DOCKER_ORGANIZATION_NAME }}/${{ env.IMAGE_NAME }}:unstable
       - name: Build and push to docker hub for master branch
         id: master_build
-        if: ${{ env.BRANCH_NAME == 'master' }}
+        # if: ${{ env.BRANCH_NAME == 'master' }}
         uses: docker/build-push-action@v5
         with:
           context: .
