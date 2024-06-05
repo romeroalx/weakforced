@@ -12,7 +12,7 @@ jobs:
     env:
       # Github.refname is wrong for pull requests - have to use head ref for them
       MYREF: ${{ github.event.pull_request && github.head_ref || github.ref_name }}
-      PLATFORMS: linux/arm64
+      PLATFORMS: linux/amd64
       # PLATFORMS: linux/arm64,linux/amd64
       DOCKERFILE: docker/wforce_image/Dockerfile.minimal
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
